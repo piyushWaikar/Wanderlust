@@ -1,0 +1,270 @@
+body {
+    font-family: "Plus Jakarta Sans", sans-serif !important;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    /* Capture all remaining space  */
+    flex: 1; 
+}
+
+.navbar{
+    height: 5rem;
+    background-color: white;
+} 
+.fa-compass{
+    color: #fe424d;
+    font-size: 2rem;
+}
+.nav-link {
+    /* why to use '!important' because to avoid bootstrap default bootstrap styling (to override*/
+    color: #222222 !important; 
+}
+.f-info-links a {
+    text-decoration: none;
+    color: #222222;
+    font-size: 1.2rem
+}
+.f-info-links a:hover{
+    text-decoration: underline;
+}
+
+.f-info-socials i, .f-info-links a{
+    margin: 0 0.75rem 0 0.75rem;
+}
+.f-info-socials i{
+    font-size: 1.7rem;
+}
+.f-info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 8rem;
+    background-color: #ebebeb;
+}
+.f-info div {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+/* Cards */
+.card{
+    border: none !important;
+    margin: 0rem 0 2rem 0;
+
+}
+
+.card-img-top {
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-body {
+    padding: 0 !important;
+    margin-left: 0.5rem;
+}
+
+.card-title{
+    margin-top: 1rem;
+}
+.a-lists{
+    text-decoration: none !important;
+}
+
+/* Card hover effect  */
+.card-img-overlay{
+    opacity: 0;
+}
+
+.card-img-overlay:hover{
+    opacity: 0.1;
+    background-color: white;
+}
+
+.new-btn {
+    background-color: #fe424d !important;
+    border: none;
+    color: white !important;
+}
+
+.show-card{
+    font-size: 1.3rem;
+}
+
+.show-card-margin{
+    margin-top: 4.5rem !important;
+}
+
+/* styles.css */
+
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+    max-width: 100%; /* Ensure the card does not exceed its container's width */
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.show-img {
+    height: 20rem !important;
+    width: 20rem !important;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card .buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.card .buttons a,
+.card .buttons button {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.card .buttons a {
+    background-color: #ffc107; /* Yellow color for edit button */
+    color: #000;
+}
+
+.card .buttons a:hover {
+    background-color: #e0a800;
+}
+
+.card .buttons button {
+    background-color: #dc3545; /* Red color for delete button */
+    color: #fff;
+}
+
+.card .buttons button:hover {
+    background-color: #c82333;
+}
+
+/* styles.css */
+
+body {
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.new-form-container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.new-form-container h3 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: bold;
+}
+
+.new-form-container label {
+    font-weight: bold;
+}
+
+.new-form-container .form-control {
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.new-form-container .form-control:focus {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    border-color: #80bdff;
+}
+
+.new-form-container .btn.new-btn {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.new-form-container .btn.new-btn:hover {
+    background-color: #0056b3;
+}
+
+/* editStyles.css */
+
+/* editStyles.css */
+
+body {
+    background-color: #e9ecef;
+    margin: 0;
+    padding: 0;
+}
+
+.edit-form-container {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    margin-top: 50px;
+}
+
+.edit-form-container h1.edit-title {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-weight: bold;
+    color: #343a40;
+}
+
+.edit-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.edit-form-group label {
+    font-weight: bold;
+    color: #495057;
+}
+
+.edit-form-group .form-control {
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    margin-bottom: 0.5rem;
+}
+
+.edit-form-group .form-control:focus {
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.25);
+    border-color: #28a745;
+}
+
+.btn.edit-btn {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn.edit-btn:hover {
+    background-color: #218838;
+}
+

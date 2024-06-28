@@ -1,0 +1,48 @@
+<!-- Exporting this body to boilerplate.ejs  -->
+<% layout("/layouts/boilerplate") %>
+
+<body>
+  <div class="row">
+    <div class="col-8 offset-2">
+      <div class="new-form-container">
+        <h3>New Listing</h3>
+        <form method="post" class="needs-validation" novalidate action="/listings/new">
+          <div>
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" placeholder="Add a catchy title" name="title" required />
+          </div>
+
+          <div>
+            <label for="description" class="form-label">Description</label>
+            <textarea name="description" class="form-control" placeholder="Enter description" required></textarea>
+          </div>
+
+          <div>
+            <label for="image" class="form-label">Image URL</label>
+            <input type="text" class="form-control" placeholder="Enter image URL / Link" name="image" />
+          </div>
+
+          <div>
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" placeholder="Enter location" name="location" required />
+          </div>
+
+          <div class="row">
+            <div class="col-md-8">
+              <label for="country" class="form-label">Country</label>
+              <input type="text" class="form-control" placeholder="India" name="country" required />
+            </div>
+
+            <div class="mb-3 col-md-4">
+              <label for="price" class="form-label">Price</label>
+              <input type="text" class="form-control" placeholder="Enter price" name="price" required />
+            </div>
+          </div>
+
+          <button class="btn new-btn" type="submit">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="/javasripts/formValidation.js"></script>
+</body>
