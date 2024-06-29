@@ -67,18 +67,11 @@ const { review } = require('./models/review.js');
 // View Route
 app.get('/listings/view/:id', wrapAsync(async (req, res) => {
     let { id } = req.params;
-    const list = await listing.findById(id);
-    console.log("This is a list ", list);
+    const list = await listing.findById(id).populate("reviews");
 
-    const reviewsId = list.reviews;
-    console.log("This is a reviewId ", reviewsId);
+    let reviews = list.reviews;
 
-    let reviews = [];
-    for (let compReview of reviewsId) {
-        reviews.push(await review.findById(compReview));
-    }
-    console.log("This is a reviews ", reviews);
-    res.render("listings/show.ejs", { list , reviews});
+    res.render("listings/show.ejs", { list, reviews });
 }));
 
 // Create new list Route
@@ -127,6 +120,7 @@ app.put('/listings/:id/edit', validateListing, wrapAsync(async (req, res) => {
     // }
 }));
 
+
 // Delete Route
 app.delete('/listings/:id/delete', wrapAsync(async (req, res) => {
     // try {
@@ -155,6 +149,7 @@ const validateReview = (req, res, next) => {
     }
 };
 
+// Creating review
 app.post('/listings/:id/review', validateReview, wrapAsync(async (req, res) => {
     const list = await listing.findById(req.params.id);
     let { comments, rating } = req.body;
@@ -172,6 +167,15 @@ app.post('/listings/:id/review', validateReview, wrapAsync(async (req, res) => {
     res.redirect(`/listings/view/${req.params.id}`);
 }));
 
+// Deleting Review
+app.delete('/listings/:id/review/:Rid',wrapAsync(async(req,res)=>{
+    let {id, Rid} = req.params;
+
+    await listing.findByIdAndUpdate(id, {$pull:{reviews: Rid}});
+    await review.findByIdAndDelete(Rid);
+
+    res.redirect(`/listings/view/${req.params.id}`);
+}));
 
 
 

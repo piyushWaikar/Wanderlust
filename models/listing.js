@@ -1,5 +1,4 @@
 const review = require('./review');
-
 try {
     const mongoose = require('mongoose');
     let imgLink = "https://images.unsplash.com/photo-1602391833977-358a52198938?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fGNhbXBpbmd8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60";
@@ -14,8 +13,8 @@ try {
         },
         image: {
             filename: {
-                type:String,
-                default:"listingimage"
+                type: String,
+                default: "listingimage"
             },
             url: {
                 type: String,
@@ -35,12 +34,21 @@ try {
             type: String,
             required: true
         },
-        reviews:[
+        reviews: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref:"review"
+                ref: "review"
             }
         ]
+    });
+
+    // Middleware to handle deletion
+    // This is order deletion function - findOneAndDelete in a sub function of findByIdAndDelete so when we delete customer using findByIdAndDelete the customer object get pass into findOneAndDelete .
+    listingSchema.post('findOneAndDelete', async function (list) {
+        if (list.reviews.length) {
+            let res = await mongoose.model("review").deleteMany({ _id: { $in: list.reviews } });
+            console.log(res);
+        }
     });
 
     const Listing = mongoose.model("Listing", listingSchema);
