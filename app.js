@@ -35,147 +35,30 @@ async function main() {
     await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
 }
 
-// Joi custom Schema validator for listing Schema model
-const { listingSchema } = require('./schema.js');
+// To use put,Delete, PATCH methods
+const methodOverrde = require('method-override');
+app.use(methodOverrde("_method"));
 
-// Defining schema validator as an middleware
-const validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body); // Validating the schema to check whether the content from body in complete or not .
-    if (error) {
-        let errMsg = error.details.map(el => el.message).join(","); // Just to separate the message from object using coma
-        throw new ExpressError(400, errMsg);
-    } else {
-        next();
-    }
-}
 
-const listing = require('./models/listing');
+
+
+// Routes Starts from Here 
 
 // Define behavior for the root route
 app.get('/', (req, res) => {
     res.send("Welcome to Wanderlust Listings");
 });
 
-// Index Route
-app.get('/listings', wrapAsync(async (req, res) => {
-    let lists = await listing.find();
-    res.render("listings/index.ejs", { lists });
-}));
+// Listings Router
+const listingRouter = require('./routes/listings.js');
+app.use('/listings',listingRouter)
 
-const { review } = require('./models/review.js');
-
-// View Route
-app.get('/listings/view/:id', wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const list = await listing.findById(id).populate("reviews");
-
-    let reviews = list.reviews;
-
-    res.render("listings/show.ejs", { list, reviews });
-}));
-
-// Create new list Route
-app.get('/listings/new', (req, res) => {
-    res.render("listings/new.ejs");
-});
-
-app.post('/listings/new', validateListing, wrapAsync(async (req, res) => {  // Add leading slash
-
-    let { title, description, image, price, location, country } = req.body;
-    // try {
-    const newList = new listing({ title, description, image: image.url, price, location, country });
-    await newList.save();
-    res.redirect('/listings');  // Redirect to the listings page after creation
-    // } catch (err) {
-    //     console.error(err);
-    //     res.status(500).send("Error creating new listing");
-    // }
-}));
-
-// Update Route
-
-app.get('/listings/:id/edit', wrapAsync(async (req, res) => {
-    // try {
-
-    let { id } = req.params;
-    let list = await listing.findById(id);
-    res.render("listings/edit.ejs", { list });
-    // } catch (err) {
-    //     console.log(err.message);
-    // }
-}));
-
-const methodOverrde = require('method-override');
-app.use(methodOverrde("_method"));
-
-// Edit Route
-app.put('/listings/:id/edit', validateListing, wrapAsync(async (req, res) => {
-    // try{
-    let { id } = req.params;
-    // let { title, description, image, price, location, country } = req.body; // Instead of this whole line we can write deconstructor {...req.body}
-    await listing.findByIdAndUpdate(id, { ...req.body });
-    res.redirect(`/listings/view/${id}`);
-    // }catch(err){
-    //     console.log(err.message);
-    // }
-}));
+// Review Router
+const reviewRouter = require('./routes/review.js');
+app.use('/listings/:id/review',reviewRouter);
 
 
-// Delete Route
-app.delete('/listings/:id/delete', wrapAsync(async (req, res) => {
-    // try {
-    let { id } = req.params;
-    await listing.findByIdAndDelete(id);
-    res.redirect(`/listings`);
-    // } catch (err) {
-    //     console.log(err.message);
-    // }
-}));
 
-
-//Review Section 
-
-// Joi custom Schema validator for rating Schema 
-const { reviewSchema } = require('./schema.js');
-
-// Defining schema validator as an middleware
-const validateReview = (req, res, next) => {
-    let { error } = reviewSchema.validate(req.body); // Validating the schema to check whether the content from body in complete or not .
-    if (error) {
-        let errMsg = error.details.map(el => el.message).join(","); // Just to separate the message from object using coma
-        throw new ExpressError(400, errMsg);
-    } else {
-        next();
-    }
-};
-
-// Creating review
-app.post('/listings/:id/review', validateReview, wrapAsync(async (req, res) => {
-    const list = await listing.findById(req.params.id);
-    let { comments, rating } = req.body;
-
-    let createReview = new review({
-        comments,
-        rating
-    });
-    await createReview.save();
-
-    list.reviews.push(createReview._id);
-
-    await list.save();
-
-    res.redirect(`/listings/view/${req.params.id}`);
-}));
-
-// Deleting Review
-app.delete('/listings/:id/review/:Rid',wrapAsync(async(req,res)=>{
-    let {id, Rid} = req.params;
-
-    await listing.findByIdAndUpdate(id, {$pull:{reviews: Rid}});
-    await review.findByIdAndDelete(Rid);
-
-    res.redirect(`/listings/view/${req.params.id}`);
-}));
 
 
 
