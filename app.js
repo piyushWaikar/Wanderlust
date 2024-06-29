@@ -35,15 +35,16 @@ async function main() {
     await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
 }
 
-const {listingSchema} = require('./schema.js');
+// Joi custom Schema validator for listing Schema model
+const { listingSchema } = require('./schema.js');
 
 // Defining schema validator as an middleware
-const validateListing = (req,res,next)=>{
-    let {error} = listingSchema.validate(req.body); // Validating the schema to check whether the content from body in complete or not .
-    if(error){
-        let errMsg = error.details.map(el=>el.message).join(","); // Just to separate the message from object using coma
-        throw new ExpressError(400,errMsg);
-    }else{
+const validateListing = (req, res, next) => {
+    let { error } = listingSchema.validate(req.body); // Validating the schema to check whether the content from body in complete or not .
+    if (error) {
+        let errMsg = error.details.map(el => el.message).join(","); // Just to separate the message from object using coma
+        throw new ExpressError(400, errMsg);
+    } else {
         next();
     }
 }
@@ -61,11 +62,23 @@ app.get('/listings', wrapAsync(async (req, res) => {
     res.render("listings/index.ejs", { lists });
 }));
 
+const { review } = require('./models/review.js');
+
 // View Route
 app.get('/listings/view/:id', wrapAsync(async (req, res) => {
     let { id } = req.params;
     const list = await listing.findById(id);
-    res.render("listings/show.ejs", { list });
+    console.log("This is a list ", list);
+
+    const reviewsId = list.reviews;
+    console.log("This is a reviewId ", reviewsId);
+
+    let reviews = [];
+    for (let compReview of reviewsId) {
+        reviews.push(await review.findById(compReview));
+    }
+    console.log("This is a reviews ", reviews);
+    res.render("listings/show.ejs", { list , reviews});
 }));
 
 // Create new list Route
@@ -73,8 +86,8 @@ app.get('/listings/new', (req, res) => {
     res.render("listings/new.ejs");
 });
 
-app.post('/listings/new',validateListing, wrapAsync(async (req, res) => {  // Add leading slash
-    
+app.post('/listings/new', validateListing, wrapAsync(async (req, res) => {  // Add leading slash
+
     let { title, description, image, price, location, country } = req.body;
     // try {
     const newList = new listing({ title, description, image: image.url, price, location, country });
@@ -103,7 +116,7 @@ const methodOverrde = require('method-override');
 app.use(methodOverrde("_method"));
 
 // Edit Route
-app.put('/listings/:id/edit',validateListing, wrapAsync(async (req, res) => {
+app.put('/listings/:id/edit', validateListing, wrapAsync(async (req, res) => {
     // try{
     let { id } = req.params;
     // let { title, description, image, price, location, country } = req.body; // Instead of this whole line we can write deconstructor {...req.body}
@@ -117,13 +130,66 @@ app.put('/listings/:id/edit',validateListing, wrapAsync(async (req, res) => {
 // Delete Route
 app.delete('/listings/:id/delete', wrapAsync(async (req, res) => {
     // try {
-        let { id } = req.params;
-        await listing.findByIdAndDelete(id);
-        res.redirect(`/listings`);
+    let { id } = req.params;
+    await listing.findByIdAndDelete(id);
+    res.redirect(`/listings`);
     // } catch (err) {
     //     console.log(err.message);
     // }
 }));
+
+
+//Review Section 
+
+// Joi custom Schema validator for rating Schema 
+const { reviewSchema } = require('./schema.js');
+
+// Defining schema validator as an middleware
+const validateReview = (req, res, next) => {
+    let { error } = reviewSchema.validate(req.body); // Validating the schema to check whether the content from body in complete or not .
+    if (error) {
+        let errMsg = error.details.map(el => el.message).join(","); // Just to separate the message from object using coma
+        throw new ExpressError(400, errMsg);
+    } else {
+        next();
+    }
+};
+
+app.post('/listings/:id/review', validateReview, wrapAsync(async (req, res) => {
+    const list = await listing.findById(req.params.id);
+    let { comments, rating } = req.body;
+
+    let createReview = new review({
+        comments,
+        rating
+    });
+    await createReview.save();
+
+    list.reviews.push(createReview._id);
+
+    await list.save();
+
+    res.redirect(`/listings/view/${req.params.id}`);
+}));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // If the user pass the route which is not Declared than :-
 app.all("*", (req, res, next) => {
@@ -133,10 +199,10 @@ app.all("*", (req, res, next) => {
 // Defining custom middleware error handler for all routes
 app.use((err, req, res, next) => {
 
-        let { statusCode = 500, message = "Something went Wrong !" } = err; // Setting default values for status and message .
-        res.status(statusCode).render("error.ejs",{message});
-        // res.status(statusCode).send(message);
-   
+    let { statusCode = 500, message = "Something went Wrong !" } = err; // Setting default values for status and message .
+    res.status(statusCode).render("error.ejs", { message });
+    // res.status(statusCode).send(message);
+
 });
 
 

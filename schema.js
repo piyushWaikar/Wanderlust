@@ -1,15 +1,19 @@
 
 // Joi custom Schema error handler . To validate the Schema .
 
-const joi = require('joi');
+const Joi = require('joi');
 
-module.exports.listingSchema = joi.object({
-    listing: joi.object({
-        title: joi.string().required(),
-        image: joi.string().allow("", null),
-        decription: joi.string().required(),
-        location: joi.string().required(),
-        country: joi.string().required(),
-        price: joi.number().min(100).required(),
-    }).required()
+module.exports.listingSchema = Joi.object({
+        title: Joi.string().min(3).max(100).required(),
+        description: Joi.string().min(10).required(),
+        image: Joi.string().allow("", null),
+        location: Joi.string().required(),
+        country: Joi.string().required(),
+        price: Joi.number().positive().required()
+    });
+
+
+module.exports.reviewSchema = Joi.object({
+        comments: Joi.string().min(3).required(),
+        rating: Joi.number().integer().min(1).max(5).required()
 });
