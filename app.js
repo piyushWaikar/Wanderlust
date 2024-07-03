@@ -39,7 +39,7 @@ app.use(session(sesssionOptions));
 // Setting up passport for Authentication 
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const {User} = require('./models/user.js');
+const User = require('./models/user.js');
 //By default we need session for Authentication on multiple page to use passport after session declaration.
 app.use(passport.initialize());
 app.use(passport.session());
@@ -100,23 +100,6 @@ app.use('/listings/:id/review', reviewRouter);
 // User Router
 const userRouter = require('./routes/user.js');
 app.use('/user',userRouter);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

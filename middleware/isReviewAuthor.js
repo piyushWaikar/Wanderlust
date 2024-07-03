@@ -5,7 +5,7 @@ const Review = require('../models/review.js');
 module.exports.isReviewAuthor = async(req,res,next)=>{
     let { id, Rid } = req.params;
     // Setting up Authorization for editing listing
-    let reveiw = await Review.findById(id);
+    let review = await Review.findById(Rid);
     if(!review.author.equals(res.locals.user._id)){
         req.flash("error","You are not the Author of this Review! ");
         return res.redirect(`/listings/view/${id}`);
