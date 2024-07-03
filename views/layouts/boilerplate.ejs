@@ -15,7 +15,10 @@
 
     <%- include("../includes/navbar.ejs") %>
     <!-- Extracting all body content here. -->
-    <div class="container"><%- body %></div> 
+    <div class="container">
+        <!-- Displaying flash message  -->
+        <%- include("../includes/flash.ejs") %>
+        <%- body %></div> 
 
     <%- include("../includes/footer.ejs") %>
 

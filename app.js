@@ -19,7 +19,47 @@ app.use(express.static(path.join(__dirname, "/public")));
 app.use((err, req, res, next) => {
     console.log(err.message);
     next(err); // passing control to express default error handling middleware
+});
+
+// Setting Session
+
+const sesssionOptions = {
+    secret: "mySuperScretString",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { // Life of a cookie 
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days , 24 hours a day , 60 minutes , 60 seconds , 1000 miliseconds a second
+        maxAge:7 * 24 * 60 * 60 * 1000,
+        httpOnly:true
+    }
+};
+const session = require('express-session');
+app.use(session(sesssionOptions));
+
+// Setting up passport for Authentication 
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const {User} = require('./models/user.js');
+//By default we need session for Authentication on multiple page to use passport after session declaration.
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+// Setting up flash for flash message 
+const flash = require('connect-flash');
+app.use(flash());
+
+app.use((req,res,next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.errorMsg = req.flash("errorMsg");
+    res.locals.error = req.flash("error");
+    res.locals.user = req.user;
+    next();
 })
+
 
 // Requiring custom error handler function for Async operations.
 const wrapAsync = require('./utils/wrapAsync.js') // We should have to wrap all the functions into wrapAsync . Instead of try and catch.
@@ -51,12 +91,15 @@ app.get('/', (req, res) => {
 
 // Listings Router
 const listingRouter = require('./routes/listings.js');
-app.use('/listings',listingRouter)
+app.use('/listings', listingRouter)
 
 // Review Router
 const reviewRouter = require('./routes/review.js');
-app.use('/listings/:id/review',reviewRouter);
+app.use('/listings/:id/review', reviewRouter);
 
+// User Router
+const userRouter = require('./routes/user.js');
+app.use('/user',userRouter);
 
 
 
@@ -80,7 +123,8 @@ app.use('/listings/:id/review',reviewRouter);
 
 // If the user pass the route which is not Declared than :-
 app.all("*", (req, res, next) => {
-    next(new ExpressError(404, "Page Not Found!"));
+    res.redirect('/listings');
+    // next(new ExpressError(404, "Page Not Found!"));
 });
 
 // Defining custom middleware error handler for all routes

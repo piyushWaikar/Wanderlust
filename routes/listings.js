@@ -7,85 +7,83 @@ const listing = require('../models/listing.js');
 const { listingSchema, reviewSchema } = require('../schema.js');
 const { review } = require('../models/review.js');
 
-// Defining schema validator as an middleware
-const validateListing = (req, res, next) => {
-    let { error } = listingSchema.validate(req.body); // Validating the schema to check whether the content from body in complete or not .
-    if (error) {
-        let errMsg = error.details.map(el => el.message).join(","); // Just to separate the message from object using coma
-        throw new ExpressError(400, errMsg);
-    } else {
-        next();
-    }
-}
+//Middlewares
+const {validateListing} = require('../middleware/validateListing.js');
+const { isLoggedIn } = require('../middleware/isLoggedIn.js');
+const { isOwner } = require('../middleware/isOwner.js');
 
-// Index Route
+
+
+// Index Route, Render all listings
 router.get('/', wrapAsync(async (req, res) => {
     let lists = await listing.find();
     res.render("listings/index.ejs", { lists });
 }));
 
 
-// View Route
+// View Route , View specific listing
 router.get('/view/:id', wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    const list = await listing.findById(id).populate("reviews");
-
-    let reviews = list.reviews;
-
-    res.render("listings/show.ejs", { list, reviews });
+    try {
+        let { id } = req.params;
+        const list = await listing.findById(id)
+            .populate({ path: "reviews", populate: { path: "author" } })
+            .populate("owner");
+        res.render("listings/show.ejs", { list });
+    } catch (ExpressError) {
+        req.flash("errorMsg", "Listing not found!");
+        res.redirect('/listings');
+    }
 }));
 
 // Create new list Route
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render("listings/new.ejs");
 });
 
-router.post('/new', validateListing, wrapAsync(async (req, res) => {  // Add leading slash
+router.post('/new', validateListing, isLoggedIn, wrapAsync(async (req, res) => {  // Add leading slash
 
     let { title, description, image, price, location, country } = req.body;
-    // try {
-    const newList = new listing({ title, description, image: image.url, price, location, country });
+    const newList = new listing({ title, description, image: image.url, price, location, country, owner: req.user });
+
     await newList.save();
+    req.flash("success", "New Listing Created !");
     res.redirect('/listings');  // Redirect to the listings page after creation
-    // } catch (err) {
-    //     console.error(err);
-    //     res.status(500).send("Error creating new listing");
-    // }
+
 }));
 
 // Update Route
 
-router.get('/:id/edit', wrapAsync(async (req, res) => {
-    // try {
+router.get('/:id/edit', isLoggedIn, isOwner, wrapAsync(async (req, res) => {
 
     let { id } = req.params;
     let list = await listing.findById(id);
+    if (!list) {
+        req.flash("errorMsg", "Listing does not Exits !");
+        res.redirect('/listings');
+    }
     res.render("listings/edit.ejs", { list });
-    // } catch (err) {
-    //     console.log(err.message);
-    // }
+
 }));
 
 
 
 // Edit Route
-router.put('/:id/edit', validateListing, wrapAsync(async (req, res) => {
+router.put('/:id/edit', isLoggedIn, isOwner, validateListing, wrapAsync(async (req, res) => {
     let { id } = req.params;
     let { title, description, image, price, location, country } = req.body; // Instead of this whole line we can write deconstructor {...req.body}
-    await listing.findByIdAndUpdate(id, { title, description, image:image.url, price, location, country });
+
+    await listing.findByIdAndUpdate(id, { title, description, image: image.url, price, location, country });
+    req.flash("success", "Listing Updated !");
     res.redirect(`/listings/view/${id}`);
 }));
 
 
 // Delete Route
-router.delete('/:id/delete', wrapAsync(async (req, res) => {
-    // try {
+router.delete('/:id/delete', isLoggedIn, isOwner, wrapAsync(async (req, res) => {
     let { id } = req.params;
     await listing.findByIdAndDelete(id);
+    req.flash("success", "Listing Deleted !");
     res.redirect(`/listings`);
-    // } catch (err) {
-    //     console.log(err.message);
-    // }
 }));
 
 module.exports = router;

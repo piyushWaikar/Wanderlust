@@ -162,6 +162,31 @@ body {
     background-color: #c82333;
 }
 
+/* Style for the Book button */
+/* Style for the Book button */
+.btn.book-btn {
+    background: linear-gradient(135deg, #1e90ff, #00bfff);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: none;
+  }
+  
+  .btn.book-btn:hover {
+    background: linear-gradient(135deg, #00bfff, #1e90ff);
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  
+
 /* styles.css */
 
 body {
@@ -357,3 +382,127 @@ body {
     border-color: maroon;
     color: white;
 }
+
+
+/* Signup page inside the user  */
+/* Custom CSS for the signup form */
+.signup-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.signup-title {
+    text-align: center;
+    color: #343a40;
+}
+
+.signup-form-group {
+    margin-bottom: 15px;
+}
+
+.signup-label {
+    font-weight: bold;
+}
+
+.signup-input {
+    border-radius: 5px;
+}
+
+.signup-invalid-feedback {
+    color: red;
+}
+
+.signup-btn {
+    width: auto;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: block;
+    margin: auto;
+}
+
+/* Nav bar design  */
+/* Style for logout button */
+  /* Custom CSS for the navbar */
+.navbar-user-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Ensure dropdown menu aligns to the right */
+.dropdown-menu-end {
+  right: 0;
+  left: auto;
+}
+
+/* Additional styles for navbar */
+.navbar {
+  background-color: #f8f9fa;
+}
+
+.navbar .nav-link {
+  color: #343a40;
+}
+
+.navbar .nav-link:hover {
+  color: #0056b3;
+}
+
+.navbar .dropdown-item {
+  color: #343a40;
+}
+
+.navbar .dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #0056b3;
+}
+
+.nav-delete{
+    color: red !important;
+}
+/* ----------------- */
+/* Custom CSS for the navbar */
+.navbar-user-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  /* Ensure dropdown menu aligns to the right */
+  .dropdown-menu-end {
+    right: 0;
+    left: auto;
+  }
+  
+  /* Additional styles for navbar */
+  .navbar {
+    background-color: #f8f9fa;
+  }
+  
+  .navbar .nav-link {
+    color: #343a40;
+  }
+  
+  .navbar .nav-link:hover {
+    color: #0056b3;
+  }
+  
+  .navbar .dropdown-item {
+    color: #343a40;
+  }
+  
+  .navbar .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #0056b3;
+  }
+  
+
+  

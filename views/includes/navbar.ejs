@@ -1,22 +1,45 @@
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/"><i class="fa-regular fa-compass"></i></a>
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/"><i class="fa-regular fa-compass"></i></a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0">
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/listings">All Listings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/listings/new">Add new Listings</a>
+        </li>
+      </ul>
+
+      <!-- User Icon Dropdown aligned to the right -->
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="../../images/user.png" class="navbar-user-img rounded-circle" alt="User Image">
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <% if (!user) { %>
+              <li><a class="dropdown-item" href="/user/signup">Sign Up</a></li>
+              <li><a class="dropdown-item" href="/user/login">Sign In</a></li>
+            <% } else { %>
+              <li class="dropdown-item"><i>@<%= user.username %></i></li>
+              <br>
+              <li><hr></li>
+              <li><a class="dropdown-item nav-delete" href="/user/logout">Logout</a></li>
+            <% } %>
+          </ul>
+        </li>
+      </ul>
       
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link " aria-current="page" href="/">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/listings">All Listings</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/listings/new">Add new Listings</a>
-          </li>
-          <li class="nav-item">
-          </li>
-        </ul>
-      </div>
     </div>
-  </nav>
-  <br>
+  </div>
+</nav>

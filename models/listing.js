@@ -1,4 +1,5 @@
-const review = require('./review');
+const {review} = require('./review');
+const {User} = require('./user.js')
 try {
     const mongoose = require('mongoose');
     let imgLink = "https://images.unsplash.com/photo-1602391833977-358a52198938?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzJ8fGNhbXBpbmd8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=800&q=60";
@@ -39,7 +40,11 @@ try {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "review"
             }
-        ]
+        ],
+        owner:{
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"User"
+        }
     });
 
     // Middleware to handle deletion

@@ -12,12 +12,22 @@
                 <p class="card-text">&#8377;<%= list.price.toLocaleString("en-In") %> / night</p>
                 <p class="card-text"><%= list.location %></p>
                 <p class="card-text"><%= list.country %></p>
-                <div class="buttons">
+                <p class="card-text">Owned by <i><%= list.owner.username %></i></p>
+                
+                <% if (user && String(user._id) === String(list.owner._id)) { %>
+                  <div class="buttons">
                     <a href="/listings/<%= list._id %>/edit">Edit</a>
                     <form action="/listings/<%= list._id %>/delete?_method=DELETE" method="post">
-                        <button>Delete</button>
+                      <button>Delete</button>
                     </form>
-                </div>
+                  </div>
+                <% } else { %>
+                  <div class="buttons">
+                    <a href="#" class="btn book-btn">Book</a>
+                  </div>
+                <% } %>
+                
+                  
             </div>
         </div>
     </div>
@@ -28,6 +38,7 @@
 <body>
     <div class="container mt-5">
         <hr>
+        <% if (user) { %>
         <h2 class="mb-4">Leave a Review</h2>
         <form action="/listings/<%= list._id %>/review" method="post" class="needs-validation" novalidate>
             <div class="form-group">
@@ -47,18 +58,21 @@
             </div>
             <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
         </form>
+        <% } %>
     </div>
 
     <!-- Display review section  -->
 
     <h3 class="mt-5">Reviews</h3>
     <div id="reviews-section">
-        <% if (reviews.length === 0) { %>
+        <% if (list.reviews.length === 0) { %>
         <p>No reviews yet. Be the first to leave a review!</p>
         <% } else { %>
-        <% reviews.forEach(review => { %>
+        <%list.reviews.forEach(review => { %>
         <div class="card mt-3 review-card">
             <div class="card-body">
+                <h5 class="card-title">@<i><%= review.author.username %></i></h5>
+                <br>
                 <p class="card-text"><%= review.comments %></p>
                 <p class="card-text">
                     Rating:
@@ -72,11 +86,13 @@
                 </p>
             </div>
         </div>
+        <% if (user && String(user._id) === String(review.author._id)) { %>
         <div class="d-flex justify-content-end">
             <form action="/listings/<%= list._id %>/review/<%= review._id %>?_method=DELETE" method="post">
                 <button class="btn btn-danger review-delete">Delete</button>
             </form>
         </div>
+        <% } %>
         </form>
         <hr>
         <% }); %>
