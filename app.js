@@ -3,12 +3,22 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 
+// Configuring dotenv
+if(process.env.NODE_ENV != "production"){ // we dont use this env variable into production phase .
+    require('dotenv').config()
+}
+
+console.log(process.env);
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // For using ejs-mate. This is used to extract header and footer part from each page and store it in one place . 
 const ejsMate = require('ejs-mate');
 app.engine('ejs', ejsMate);
+
+// Configuring multer 
+const multer = require('multer');
 
 // Use middlewares correctly
 app.use(express.json());
@@ -99,6 +109,7 @@ app.use('/listings/:id/review', reviewRouter);
 
 // User Router
 const userRouter = require('./routes/user.js');
+const { log } = require('console');
 app.use('/user',userRouter);
 
 
