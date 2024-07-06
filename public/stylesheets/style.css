@@ -505,4 +505,146 @@ body {
   }
   
 
+  /* navbar button  */
+  /* Basic styling for the button */
+.nav-button {
+    display: inline-block;
+    padding: 0.6rem 1rem;
+    background-color: #FE424D; /* New color */
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4rem; /* Oval shape */
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Hover effect */
+.nav-button:hover {
+    background-color: #C8353C; /* Darker shade of the new color */
+    color: #fff;
+}
+
+/* add tax button  */
+.filters {
+    flex-wrap: wrap !important;
+}
+
+.filter i {
+    font-size: 1.2rem;
+}
+
+.filter p {
+    font-size: 0.8rem;
+}
+
+.filter {
+    opacity: 0.8;
+    margin-left: 2rem !important;
+}
+
+.filter:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+
+.tax-button {
+    flex: 1;
+}
+
+.border-tax {
+    border: 2px solid #FE424D;
+    border-radius: 5rem;
+    padding: 0.3rem 1rem;
+}
+
+.logo-icon {
+    display: flex;
+    align-items: center;
+    color: #FE424D !important;
+    font-size: 2rem !important;
+}
+
+/* Search bar  */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+  }
+  
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .search-nav-container {
+    position: relative;
+    width: 20rem;
+    display: flex;
+    align-items: center;
+    border: 1px solid #FE424D !important;
+    border-radius: 1.3rem;
+    /* padding: 0.0rem 0.2rem; */
+  }
+  
+  .search-nav-input {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 1.3rem;
+    transition: all 0.3s ease;
+    border-right: none;
+    border: none;
+  }
+  
+  .search-nav-input:focus {
+    outline: none;
+    border-color: #FE424D;
+    box-shadow: 0 0 10px rgba(255, 27, 27, 0.5);
+  }
+  
+  .search-nav-button {
+    background-color: #FE424D;
+    border: none;
+    padding: 8px 12px;
+    margin-right: 2px;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .search-nav-button i {
+    font-size: 16px;
+  }
+  
+  .search-nav-button:hover {
+    background-color: #e03d48; /* Adjusted to a slightly darker shade of the original color */
+  }
+  
+  .search-nav-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: none;
+    z-index: 1000;
+  }
+  
+  .search-nav-suggestions li {
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .search-nav-suggestions li:hover {
+    background-color: #f4f4f4;
+  }
   

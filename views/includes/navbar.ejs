@@ -1,8 +1,10 @@
 <nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-regular fa-compass"></i></a>
+  <div class="container-fluid d-flex align-items-center">
+    <div class="d-flex flex-row">
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      <a class="navbar-brand logo-icon" href="/listings"><i class="fa-regular fa-compass"></i>Wanderlust</a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -10,36 +12,96 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" href="/">Home</a>
+          <a class="nav-link" aria-current="page" href="/listings">Explore</a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <a class="nav-link" href="/listings">All Listings</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/listings/new">Add new Listings</a>
-        </li>
+        </li> -->
+        
       </ul>
-
-      <!-- User Icon Dropdown aligned to the right -->
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="../../images/user.png" class="navbar-user-img rounded-circle" alt="User Image">
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <% if (!user) { %>
-              <li><a class="dropdown-item" href="/user/signup">Sign Up</a></li>
-              <li><a class="dropdown-item" href="/user/login">Sign In</a></li>
-            <% } else { %>
-              <li class="dropdown-item"><i>@<%= user.username %></i></li>
-              <br>
-              <li><hr></li>
-              <li><a class="dropdown-item nav-delete" href="/user/logout">Logout</a></li>
-            <% } %>
-          </ul>
-        </li>
-      </ul>
-      
     </div>
   </div>
+
+    <!-- Search bar  -->
+    <div class="search-nav-container">
+      <input type="text" class="search-nav-input" placeholder="Search for villas..." id="searchInput" oninput="showSuggestions(this.value)">
+      <button class="search-nav-button"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <ul class="search-nav-suggestions" id="suggestionsList"></ul>
+    </div>
+  
+
+
+      <!-- User Icon Dropdown aligned to the right -->
+      <div class="d-flex flex-row justify-content-center align-items-center">
+        <a class="nav-button me-3" href="/listings/new">Wanderlust your Home</a>
+
+        <ul class="navbar-nav ms-auto">
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <img src="../../images/user.png" class="navbar-user-img rounded-circle" alt="User Image">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+              <% if (!user) { %>
+              <li><a class="dropdown-item" href="/user/signup">Sign Up</a></li>
+              <li><a class="dropdown-item" href="/user/login">Sign In</a></li>
+              <% } else { %>
+              <li class="dropdown-item"><i>@<%= user.username %></i></li>
+              <br>
+              <li>
+                <hr>
+              </li>
+              <li><a class="dropdown-item nav-delete" href="/user/logout">Logout</a></li>
+              <% } %>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+  </div>
 </nav>
+
+<script>
+  const suggestions = [
+  'Beachside Villa',
+  'Mountain Retreat',
+  'City Apartment',
+  'Country Cottage',
+  'Luxury Villa'
+];
+
+function showSuggestions(value) {
+  const suggestionsList = document.getElementById('suggestionsList');
+  suggestionsList.innerHTML = '';
+
+  if (value.length > 0) {
+    const filteredSuggestions = suggestions.filter(suggestion =>
+      suggestion.toLowerCase().includes(value.toLowerCase())
+    );
+
+    filteredSuggestions.forEach(suggestion => {
+      const li = document.createElement('li');
+      li.textContent = suggestion;
+      li.addEventListener('click', () => {
+        document.getElementById('searchInput').value = suggestion;
+        suggestionsList.innerHTML = '';
+        suggestionsList.style.display = 'none';
+      });
+      suggestionsList.appendChild(li);
+    });
+
+    suggestionsList.style.display = 'block';
+  } else {
+    suggestionsList.style.display = 'none';
+  }
+}
+
+document.addEventListener('click', (event) => {
+  const isClickInside = document.querySelector('.search-nav-container').contains(event.target);
+  if (!isClickInside) {
+    document.getElementById('suggestionsList').style.display = 'none';
+  }
+});
+
+</script>

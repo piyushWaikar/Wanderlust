@@ -26,10 +26,14 @@ module.exports.renderNewListingForm = (req, res) => {
 
 
 module.exports.postNewListingForm = async (req, res) => {  // Add leading slash
-    let { title, description, image, price, location, country } = req.body;
-    const newList = new Listing({ title, description, image: image.url, price, location, country, owner: req.user });
+    // extracting image / file details to push into data base 
+    let url = req.file.path;
+    let filename = req.file.filename
 
+    let { title, description, price, location, country } = req.body;
+    const newList = new Listing({ title, description, image: { filename, url }, price, location, country, owner: req.user });
     await newList.save();
+
     req.flash("success", "New Listing Created !");
     res.redirect('/listings');  // Redirect to the listings page after creation
 };
@@ -47,12 +51,20 @@ module.exports.editListingForm = async (req, res) => {
 
 
 module.exports.putEditListingForm = async (req, res) => {
-    let { id } = req.params;
-    let { title, description, image, price, location, country } = req.body; // Instead of this whole line we can write deconstructor {...req.body}
+    // Extracting image details from multer
+    let url = req.file.path;
+    let filename = req.file.filename;
 
-    await Listing.findByIdAndUpdate(id, { title, description, image: image.url, price, location, country });
-    req.flash("success", "Listing Updated !");
-    res.redirect(`/listings/view/${id}`);
+    if(typeof req.file !== "undefined"){
+        let { id } = req.params;
+        let { title, description, image, price, location, country } = req.body; // Instead of this whole line we can write deconstructor {...req.body}
+        
+        await Listing.findByIdAndUpdate(id, { title, description, image: { filename, url }, price, location, country });
+        req.flash("success", "Listing Updated !");
+        res.redirect(`/listings/view/${id}`);
+    }else {
+        req.flash("error","Image is empty");
+    }
 };
 
 

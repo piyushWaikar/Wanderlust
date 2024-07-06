@@ -5,7 +5,7 @@
         <div class="col-8 offset-2">
             <div class="edit-form-container">
                 <h1 class="edit-title mb-3">Edit listing</h1>
-                <form action="/listings/<%= list._id %>/edit?_method=PUT" method="post" class="needs-validation " novalidate>
+                <form action="/listings/<%= list._id %>/edit?_method=PUT" method="post" class="needs-validation" enctype="multipart/form-data" novalidate>
                     <div class="edit-form-group">
                         <label for="title" class="form-label">Title</label>
                         <input type="text" class="form-control" placeholder="Add a catchy title" name="title" value="<%= list.title %>" required />
@@ -14,9 +14,10 @@
                         <label for="description" class="form-label">Description</label>
                         <textarea name="description" class="form-control" placeholder="Enter description" required><%= list.description %></textarea>
                     </div>
+                    
                     <div class="edit-form-group">
-                        <label for="image" class="form-label">Image URL</label>
-                        <input type="text" class="form-control" placeholder="Enter image URL" name="image" value="<%= list.image.url %>" required />
+                        <label for="image" class="form-label">Upload Image</label>
+                        <input type="file" class="form-control" placeholder="Enter image URL" name="image" value="<%= list.image.url %>" required />
                     </div>
                     <div class="edit-form-group">
                         <label for="location" class="form-label">Location</label>
